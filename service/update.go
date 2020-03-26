@@ -6,16 +6,16 @@ import (
 	"restapi/model"
 )
 
-type UpdateReq struct {
+type UpdateTask struct {
 	value model.UpdateReq
 }
 
 func (h *Handlers) Update(w http.ResponseWriter, r *http.Request) {
-	var rq UpdateReq
+	var rq UpdateTask
 	rq.initRq(r)
 }
 
-func (rq UpdateReq) initRq(r *http.Request) *UpdateReq {
+func (rq UpdateTask) initRq(r *http.Request) *UpdateTask {
 	json.NewDecoder(r.Body).Decode(&rq)
 	return &rq
 }
