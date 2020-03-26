@@ -39,7 +39,7 @@ func (t *InquiryTask) initReqId(r *http.Request) *InquiryTask {
 
 func (t *InquiryTask) isFound(rs *gorm.DB) {
 	if rs.Error != nil {
-		t.err = errors.New(str.InvalidUserId)
+		t.err = errors.New(str.InvalidUserID)
 		return
 	}
 	t.value.UserInfo = rs.Value.(*entity.UserInfo)

@@ -9,6 +9,7 @@ import (
 	"restapi/common"
 	"restapi/entity"
 	"restapi/model"
+	"restapi/rule"
 	"restapi/str"
 )
 
@@ -34,9 +35,9 @@ func (t *RegisterTask) initRq(r *http.Request) *RegisterTask {
 
 func (t RegisterTask) valid() error {
 	return validation.ValidateStruct(&t,
-		validation.Field(&t.FirstName, validation.Required, validation.Length(1, 20)),
-		validation.Field(&t.LastName, validation.Required, validation.Length(1, 20)),
-		validation.Field(&t.Age, validation.Max(100)))
+		validation.Field(&t.FirstName, rule.FirstName...),
+		validation.Field(&t.LastName, rule.LastName...),
+		validation.Field(&t.Age, rule.Age...))
 }
 
 func (t *RegisterTask) create(db *gorm.DB) {

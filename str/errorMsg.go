@@ -1,5 +1,6 @@
 package str
 
 const (
-	InvalidUserId = "invalid user id"
+	InvalidUserID    = "invalid user id"
+	UserIDIsNotFound = "UserId is not found"
 )

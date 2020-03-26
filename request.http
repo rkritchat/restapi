@@ -2,17 +2,28 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "firstName": "5555",
+  "firstName": "55555",
   "lastName": "ZZZZZ",
   "age": 20
 }
 
-###
+### inquiry
 
-GET http://localhost:8080/inquiry/35
+GET http://localhost:8080/inquiry/1
 
-###
+### inquiry all
 
 GET http://localhost:8080/inquiry
+
+### update
+POST http://localhost:8080/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "firstName": "ZZAZAZZAZA",
+  "lastName": "ZZAZAZZAZA",
+  "age": 11
+}
 
 ###

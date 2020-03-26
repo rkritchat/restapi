@@ -9,7 +9,7 @@ type RegisterReq struct {
 
 //Request for Update user info service
 type UpdateReq struct {
-	Id        string `json:"id" validate:"required"`
+	Id        int    `json:"id" validate:"required"`
 	FirstName string `json:"firstName" validate:"required,max=20"`
 	LastName  string `json:"lastName" validate:"required,max=20"`
 	Age       int    `json:"age" validate:"required"`
