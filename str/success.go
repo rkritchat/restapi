@@ -1,5 +1,7 @@
 package str
 
 const (
-	RegisterSuccessfully = "Register successfully"
+	RegisterSuccessfully           = "Register successfully"
+	InquirySuccessfully            = "Inquiry successfully"
+	InquiryAllUserInfoSuccessfully = "Inquiry All UserInfo successfully"
 )

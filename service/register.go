@@ -2,7 +2,8 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/go-playground/validator/v10"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"net/http"
 	"restapi/common"
@@ -11,38 +12,37 @@ import (
 	"restapi/str"
 )
 
-func Register(w http.ResponseWriter, r *http.Request) {
-	rq := initRq(r)
-	if valid(rq, w) == nil {
-		create(rq)
-		common.Res(w, str.RegisterSuccessfully, nil)
+type RegisterTask struct {
+	err error
+	model.RegisterReq
+}
+
+func (h *Handlers) Register(w http.ResponseWriter, r *http.Request) {
+	task := (&RegisterTask{}).initRq(r)
+	if err := task.valid(); err != nil {
+		common.RespErr(w, err)
+		return
 	}
+	task.create(h.db)
+	common.RespCommon(w, str.RegisterSuccessfully, task.err)
 }
 
-func initRq(r *http.Request) *model.RegisterReq {
-	var rq model.RegisterReq
-	json.NewDecoder(r.Body).Decode(&rq)
-	return &rq
+func (t *RegisterTask) initRq(r *http.Request) *RegisterTask {
+	json.NewDecoder(r.Body).Decode(&t)
+	return t
 }
 
-func valid(rq *model.RegisterReq, w http.ResponseWriter) error {
-	v := validator.New()
-	err := v.Struct(rq)
-	if err != nil {
-		common.Res(w, str.Empty, err)
-		return err
-	}
-	return nil
+func (t RegisterTask) valid() error {
+	return validation.ValidateStruct(&t,
+		validation.Field(&t.FirstName, validation.Required, validation.Length(1, 20)),
+		validation.Field(&t.LastName, validation.Required, validation.Length(1, 20)),
+		validation.Field(&t.Age, validation.Max(100)))
 }
 
-func create(rq *model.RegisterReq){
-	db := common.DBConnect()
-	db.SingularTable(true)
-	defer db.Close()
-	db.Create(&entity.UserInfo{
-		FirstName: rq.FirstName,
-		LastName:  rq.LastName,
-		Age:       rq.Age,
-	})
-	db.Commit()
+func (t *RegisterTask) create(db *gorm.DB) {
+	t.err = db.Create(&entity.UserInfo{
+		FirstName: t.FirstName,
+		LastName:  t.LastName,
+		Age:       t.Age,
+	}).Error
 }

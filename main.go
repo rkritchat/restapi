@@ -2,26 +2,23 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"net/http"
+	"restapi/common"
 	"restapi/path"
 	"restapi/service"
-	"restapi/str"
 )
 
 func main() {
-	config()
+	common.LoadConfig()
+	db := common.DBConnect()
+	defer db.Close()
+
+	h := service.NewHandle(&db)
+
 	r := mux.NewRouter()
-	r.HandleFunc(path.RegisterPath, service.Register).Methods(http.MethodPost)
-	//http.Handle(path.ApiPrefixPath, r)
-    http.ListenAndServe(":8080", r)
+	r.HandleFunc(path.RegisterPath, h.Register).Methods(http.MethodPost)
+	r.HandleFunc(path.UpdatePath, h.Update).Methods(http.MethodPost)
+	r.HandleFunc(path.InquiryPath, h.Inquiry).Methods(http.MethodGet)
+	r.HandleFunc(path.InquiryAllPath, h.InquiryAll).Methods(http.MethodGet)
+	http.ListenAndServe(":8080", r)
 }
-
-func config() {
-	viper.SetConfigName(str.Config)
-	viper.AddConfigPath(str.Dot)
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err.Error())
-	}
-}
-
