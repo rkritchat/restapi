@@ -16,10 +16,12 @@ var LastName = []validation.Rule{
 
 //Age required and maximum value is one-hundred
 var Age = []validation.Rule{
+	validation.Required.Error("must more than 0"),
 	validation.Min(1),
 	validation.Max(100),
 }
 
 var Id = []validation.Rule{
+	validation.Required,
 	validation.Min(1),
 }

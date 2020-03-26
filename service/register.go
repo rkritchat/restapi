@@ -33,8 +33,8 @@ func (t *RegisterTask) initRq(r *http.Request) *RegisterTask {
 	return t
 }
 
-func (t RegisterTask) valid() error {
-	return validation.ValidateStruct(&t,
+func (t *RegisterTask) valid() error {
+	return validation.ValidateStruct(t,
 		validation.Field(&t.FirstName, rule.FirstName...),
 		validation.Field(&t.LastName, rule.LastName...),
 		validation.Field(&t.Age, rule.Age...))

@@ -34,9 +34,9 @@ func (t *UpdateTask) initRq(r *http.Request) *UpdateTask {
 	return t
 }
 
-func (t UpdateTask) Validate() {
-	t.err = validation.ValidateStruct(&t,
-		validation.Field(&t.Id, rule.FirstName...),
+func (t *UpdateTask) Validate() {
+	t.err = validation.ValidateStruct(t,
+		validation.Field(&t.Id, rule.Id...),
 		validation.Field(&t.FirstName, rule.FirstName...),
 		validation.Field(&t.LastName, rule.LastName...),
 		validation.Field(&t.Age, rule.Age...))
